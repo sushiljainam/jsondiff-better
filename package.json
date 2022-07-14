@@ -1,0 +1,8 @@
+{
+  "name": "jsondiff-better",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sushiljainam/jsondiff-better",
+  "author": "Sushil Jain <13596814+sushiljainam@users.noreply.github.com>",
+  "license": "MIT"
+}
