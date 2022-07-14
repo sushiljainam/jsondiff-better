@@ -153,7 +153,7 @@ var jdd = {
             if (['array', 'string', 'number', 'boolean', 'null'].indexOf(getType(val2)) > -1) {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                     config2, jdd.generatePath(config2),
-                    'Both types should be objects', jdd.TYPE));
+                    `Both types should be objects </br> ${jdd.getHintText(config1, val1, 'LEFT')} </br> ${jdd.getHintText(config2, val2, 'RIGHT')}`, jdd.TYPE));
             } else {
                 jdd.findDiffs(config1, val1, config2, val2);
             }
@@ -161,7 +161,7 @@ var jdd = {
             if (getType(val2) !== 'string') {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                     config2, jdd.generatePath(config2),
-                    'Both types should be strings', jdd.TYPE));
+                    `Both types should be strings </br> ${jdd.getHintText(config1, val1, 'LEFT')} </br> ${jdd.getHintText(config2, val2, 'RIGHT')}`, jdd.TYPE));
             } else if (val1 !== val2) {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                     config2, jdd.generatePath(config2),
@@ -171,7 +171,7 @@ var jdd = {
             if (getType(val2) !== 'number') {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                     config2, jdd.generatePath(config2),
-                    'Both types should be numbers', jdd.TYPE));
+                    `Both types should be numbers </br> ${jdd.getHintText(config1, val1, 'LEFT')} </br> ${jdd.getHintText(config2, val2, 'RIGHT')}`, jdd.TYPE));
             } else if (val1 !== val2) {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                     config2, jdd.generatePath(config2),
@@ -237,7 +237,7 @@ var jdd = {
         if (getType(val2) !== 'boolean') {
             jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
                 config2, jdd.generatePath(config2),
-                'Both types should be booleans', jdd.TYPE));
+                `Both types should be booleans </br> ${jdd.getHintText(config1, val1, 'LEFT')} </br> ${jdd.getHintText(config2, val2, 'RIGHT')}`, jdd.TYPE));
         } else if (val1 !== val2) {
             if (val1) {
                 jdd.diffs.push(jdd.generateDiff(config1, jdd.generatePath(config1),
@@ -478,6 +478,32 @@ var jdd = {
         } else {
             return s;
         }
+    },
+
+    /**
+     * Generate a JSON path based on the specific configuration and an optional property.
+     */
+    generateDotPath: function (config, rootLabel) {
+        var s = '';
+        console.log(config.currentPath);
+        config.currentPath.forEach(function (path, i) {
+            // s += path.indexOf(' ') > -1 ? `["${path.replace(jdd.SEPARATOR, '')}"]` : path.replace(jdd.SEPARATOR, '.');
+            s += path.length === 1 ? i === 0 ? rootLabel : '' : `["${path.replace(jdd.SEPARATOR, '')}"]`;
+        });
+
+        // if (rootLabel) {
+        //     s = rootLabel + s;
+        // }
+
+        if (s.length === 0) {
+            return rootLabel || 'ROOT';
+        } else {
+            return s;
+        }
+    },
+
+    getHintText: function (configAny, valAny, side) {
+        return `<code>${jdd.generateDotPath(configAny, side)}:${getType(valAny)}(${valAny})</code>`;
     },
 
     /**
